@@ -941,6 +941,8 @@ export function renderDidError() {
 function workLoopSync() {
   // Already timed out, so perform work without checking if we need to yield.
   while (workInProgress !== null) {
+    // performUnitOfWork 返回 null 或 workInProgress.sibling
+    // performUnitOfWork 会先向下遍历子树，然后 向上遍历 收集 Effect
     workInProgress = performUnitOfWork(workInProgress);
   }
 }
@@ -967,6 +969,7 @@ function performUnitOfWork(unitOfWork: Fiber): Fiber | null {
     next = beginWork(current, unitOfWork, renderExpirationTime);
     stopProfilerTimerIfRunningAndRecordDelta(unitOfWork, true);
   } else {
+    // beginWork 有返回的话是 unitOfWork.child
     next = beginWork(current, unitOfWork, renderExpirationTime);
   }
 
@@ -974,6 +977,8 @@ function performUnitOfWork(unitOfWork: Fiber): Fiber | null {
   unitOfWork.memoizedProps = unitOfWork.pendingProps;
   if (next === null) {
     // If this doesn't spawn new work, complete the current work.
+    // completeUnitOfWork 会返回 unitOfWork.sibling 或者 null
+    // completeUnitOfWork 向上遍历， 收集 effect 链
     next = completeUnitOfWork(unitOfWork);
   }
 
@@ -1000,9 +1005,11 @@ function completeUnitOfWork(unitOfWork: Fiber): Fiber | null {
         !enableProfilerTimer ||
         (workInProgress.mode & ProfileMode) === NoContext
       ) {
+        // completeWork 基本上都会返回null
         next = completeWork(current, workInProgress, renderExpirationTime);
       } else {
         startProfilerTimer(workInProgress);
+        // completeWork 基本上都会返回null
         next = completeWork(current, workInProgress, renderExpirationTime);
         // Update render duration assuming we didn't error.
         stopProfilerTimerIfRunningAndRecordDelta(workInProgress, false);
