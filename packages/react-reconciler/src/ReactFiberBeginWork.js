@@ -688,6 +688,7 @@ function updateClassComponent(
   let shouldUpdate;
   if (instance === null) {
     if (current !== null) {
+      // instance 不存在， current 存在， 处于 suspended 状态
       // An class component without an instance only mounts if it suspended
       // inside a non- concurrent tree, in an inconsistent state. We want to
       // tree it like a new mount, even though an empty version of it already

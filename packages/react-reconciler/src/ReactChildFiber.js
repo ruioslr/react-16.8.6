@@ -778,6 +778,7 @@ function ChildReconciler(shouldTrackSideEffects) {
     let newIdx = 0;
     let nextOldFiber = null;
     // 第一轮遍历条件：存在原先的子节点且未遍历完需要更新的子节点
+    // 会在遍历到第一个不能复用的节点时 跳出
     for (; oldFiber !== null && newIdx < newChildren.length; newIdx++) {
       // 第一个条件没看懂，想不到什么情况下会老的 fiber 的 index > newIdx
       //  正常来说 nextOldFiber 就是下一个节点了

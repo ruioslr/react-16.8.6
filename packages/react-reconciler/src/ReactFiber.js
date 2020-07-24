@@ -477,7 +477,9 @@ export function createFiberFromTypeAndProps(
   let fiberTag = IndeterminateComponent;
   // The resolved type is set if we know what the final type will be. I.e. it's not lazy.
   let resolvedType = type;
+  // typeof class 也是 function
   if (typeof type === 'function') {
+    // 这里只对 class 做了处理， function Component 还是 IndeterminateComponent
     if (shouldConstruct(type)) {
       fiberTag = ClassComponent;
     }

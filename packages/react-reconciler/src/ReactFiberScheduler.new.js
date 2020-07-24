@@ -977,6 +977,7 @@ function performUnitOfWork(unitOfWork: Fiber): Fiber | null {
   unitOfWork.memoizedProps = unitOfWork.pendingProps;
   if (next === null) {
     // If this doesn't spawn new work, complete the current work.
+
     // completeUnitOfWork 会返回 unitOfWork.sibling 或者 null
     // completeUnitOfWork 向上遍历， 收集 effect 链
     next = completeUnitOfWork(unitOfWork);
@@ -1065,6 +1066,7 @@ function completeUnitOfWork(unitOfWork: Fiber): Fiber | null {
       // This fiber did not complete because something threw. Pop values off
       // the stack without entering the complete phase. If this is a boundary,
       // capture values if possible.
+      // 有异常时
       const next = unwindWork(workInProgress, renderExpirationTime);
 
       // Because this fiber did not complete, don't reset its expiration time.
