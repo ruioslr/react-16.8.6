@@ -1288,6 +1288,8 @@ function commitRootImpl(root, expirationTime) {
     // The first phase a "before mutation" phase. We use this phase to read the
     // state of the host tree right before we mutate it. This is where
     // getSnapshotBeforeUpdate is called.
+
+    // before mutation 阶段
     startCommitSnapshotEffectsTimer();
     prepareForCommit(root.containerInfo);
     nextEffect = firstEffect;
@@ -1320,6 +1322,7 @@ function commitRootImpl(root, expirationTime) {
 
     // The next phase is the mutation phase, where we mutate the host tree.
     startCommitHostEffectsTimer();
+    // mutation 阶段 ： 执行真正的 Dom 操作
     nextEffect = firstEffect;
     do {
       if (__DEV__) {
@@ -1353,6 +1356,7 @@ function commitRootImpl(root, expirationTime) {
     // the host tree after it's been mutated. The idiomatic use case for this is
     // layout, but class component lifecycles also fire here for legacy reasons.
     startCommitLifeCyclesTimer();
+    // loyout 阶段： Dom 操作完成之后， 这个阶段可以访问到 更新后的Dom
     nextEffect = firstEffect;
     do {
       if (__DEV__) {
